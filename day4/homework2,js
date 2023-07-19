@@ -1,0 +1,37 @@
+function reverse(array){
+    try{
+        if(Array.isArray(array)){
+            if(array.length>0){
+                //remove the i-th element from last element(while changing i from second from last to first element) and push it. example: [1,2,3] remove 2 and add it after 3 then remove 1 and add it after 2
+                for(let i=array.length-2;i>=0;i--){
+                    array.push(array.splice(i,1));
+                }
+
+                //second, harder way...
+
+                // for(let i=0;i<=array.length-2;i++){
+                //     array.push(array.splice(array.length-2-i,1));
+                // }
+
+                //remove [] and print array
+                console.log(array.flat());  
+
+            }else{
+                throw new Error("Error: Array should not be empty")
+            }
+
+        }else{
+            throw new Error("Error: Parameter required and has to be only array")
+        }
+
+    }catch(error){
+        console.log(error.message);
+    }
+}
+reverse([1,2,3,4,5,6,7,8,9]);
+reverse([1,2]);
+reverse([1]);
+reverse([]);
+reverse("sss");
+reverse();
+
