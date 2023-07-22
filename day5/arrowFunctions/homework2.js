@@ -2,17 +2,22 @@
 let mix = (...args) => {
     let level = 0;
     let res;
-    let obj={errors:[],value:0};
+    let obj = { errors: [], value: 0 };
     for (let i in args) {
         try {
             let func = args[i];
             if (typeof func == "function") {
+                if (typeof func() == "number" && !isNaN(func(res))) {
+
                     if (i == 0) {
                         res = func();
                     } else {
                         res = func(res);
                     }
-                
+                } else {
+                    throw new Error("Error: Each function has to return number");
+
+                }
             } else {
                 throw new Error("Error: Each parameter has to be function");
             }
@@ -22,14 +27,17 @@ let mix = (...args) => {
             obj.errors.push({
                 name: error.name,
                 message: error.message,
-                stack:error.stack,
+                stack: error.stack,
                 level: level
             });
-            
+            //if we got error on first callback it should stop the loop
+            if (obj.errors[0].level == 0) {
+                break;
+            }
             level++;
         }
     }
-    obj.value=res;
+    obj.value = res;
     console.log(obj)
 }
 
@@ -49,13 +57,13 @@ mix(() => {
     return prev + 15;
 }, (prev) => {
     return prev / 7;
-}, [1,2,3]);
+}, [1, 2, 3]); //3
 
-//without errors 
+//first callback throws error
 mix(() => {
-    return 10;
+    return NaN;
 }, (prev) => {
-    return prev + 3;
+    return null;
 },  (prev) => {
     return prev / 4;
 });
