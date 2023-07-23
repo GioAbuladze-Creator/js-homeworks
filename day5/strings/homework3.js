@@ -6,7 +6,7 @@ function searchWord(target,find){
         }
         let count=0;
         for(let i=0;i<target.length;i++){
-            if (target.substring(i,i+find.length).toLowerCase()==find.toLocaleLowerCase()){
+            if (target.substring(i,i+find.length).toLowerCase()==find.toLowerCase()){
                 count++;
                 //to avoid unnecessary count, in (aaa,aa) count == 1 instead of 2
                 i+=find.length-1;
