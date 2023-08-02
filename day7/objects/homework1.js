@@ -11,8 +11,7 @@ Object.defineProperty(Object.prototype,'mergeDeepRight',{
                 //for nested object
                 this[i].mergeDeepRight(value);
             }else if(Array.isArray(value)){
-                //for array
-                
+                //for array               
                 this[i]=this[i].concat(source[i])
             }else{
                 //otherwise simply change it
@@ -41,7 +40,7 @@ let update={
         email: 'baa@example.com',
         favorite: true,
         meta: {
-            tags: ['vip','important']
+            tags: ['vip']
         }
     }
 };
