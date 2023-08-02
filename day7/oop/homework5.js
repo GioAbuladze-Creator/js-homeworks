@@ -20,10 +20,12 @@ function CoffeeMachine(power, capacity) {
     }
     function onReady() {
 		console.log('Coffee is ready');
+		running=false;
     }
     this.setOnReady = function (callback) {
         if (typeof callback === 'function') {
             onReady = callback;
+			running=false;
         } else {
             throw new Error("onReady must be a function");
         }
