@@ -9,10 +9,18 @@ Object.defineProperty(Object.prototype,'mergeDeepRight',{
 
             if(typeof value === 'object' && !Array.isArray(value) && value!== null){
                 //for nested object
-                this[i].mergeDeepRight(value);
+                if(i in this){
+                    this[i].mergeDeepRight(value);
+                }else{
+                    this[i]=source[i]
+                }
             }else if(Array.isArray(value)){
                 //for array               
-                this[i]=this[i].concat(source[i])
+                if(i in this){
+                    this[i]=this[i].concat(source[i])
+                }else{
+                    this[i]=source[i]
+                }
             }else{
                 //otherwise simply change it
                 this[i]=source[i]
@@ -38,9 +46,12 @@ let update={
     age: 40,
     contact: {
         email: 'baa@example.com',
+        ss:[2,3,4],
+        aa:{a:1,b:3},
         favorite: true,
         meta: {
-            tags: ['vip']
+            tags: ['vip'],
+            xx:[2,3]
         }
     }
 };
