@@ -12,19 +12,24 @@ class DB {
         this.#data = new Map();
     }
     create(obj) {
+        if(arguments.length==0){
+            throw new Error("Please pass the object")
+        }else if (arguments.length>1){
+            throw new Error("create() method only takes one parameter")
+        }
         if (typeof obj !== 'object' || Array.isArray(obj) || obj === null || Object.keys(obj) == 0) {
             throw new Error("Invalid Object")
         }
-        if (!obj.name || typeof obj.name != 'string') {
+        if (!obj.hasOwnProperty('name') || typeof obj.name != 'string') {
             throw new Error("Invalid name")
         }
-        if (!obj.age || typeof obj.age != 'number' || isNaN(obj.age)) {
+        if (!obj.hasOwnProperty('age') || typeof obj.age != 'number' || isNaN(obj.age)) {
             throw new Error("Invalid age")
         }
-        if (!obj.country || typeof obj.country != 'string') {
+        if (!obj.hasOwnProperty('country') || typeof obj.country != 'string') {
             throw new Error("Invalid country")
         }
-        if (!obj.salary || typeof obj.salary != 'number' || isNaN(obj.salary)) {
+        if (!obj.hasOwnProperty('salary') || typeof obj.salary != 'number' || isNaN(obj.salary)) {
             throw new Error("Invalid salary")
         }
         // wrong keys
@@ -37,13 +42,13 @@ class DB {
         // return id ---- key
         return id;
     }
-
     read(id) {
-        if (!id && id != false) {
+        if (arguments.length==0) {
             // if(id===undefined) ---- wrong (user can pass undefined as an argument)
-            // if (!id) ---- wrong (user can pass false and it is not a string) ---> wrong error
-            // another solution:  if(arguments.length==0) 
+            // if (!id) ---- wrong (user can pass false and it is not a string) ---> wrong error 
             throw new Error("Please pass the id")
+        }else if(arguments.length>1){
+            throw new Error("Read method takes only one parameter")
         }
         if (typeof id != 'string') {
             throw new Error("id must be a string")
@@ -64,7 +69,11 @@ class DB {
         return [...this.#data.values()]
     }
     update(id, obj) {
-        if (!id || id == true) {
+        if(arguments.length!=2){
+            throw new Error("Update takes id and object as an argument")
+        }
+        if (!id && id != false ) {
+            //id!=false because when passing false !id--->true throws wrong error, for boolean values we have next error
             throw new Error("Please pass the correct id")
         }
         if (typeof id != 'string') {
@@ -73,8 +82,8 @@ class DB {
         if (!this.#data.has(id)) {
             throw new Error("Please pass existing id")
         }
-        if (!obj || obj == false) {
-            throw new Error("Please pass the object")
+        if (!obj && obj != false) {
+            throw new Error("Please pass the correct object")
         }
         if (typeof obj !== 'object' || Array.isArray(obj) || obj === null || Object.keys(obj) == 0) {
             throw new Error("Parameter should be a proper Object")
@@ -98,6 +107,9 @@ class DB {
         this.#data.set(id, updated);
     }
     delete(id) {
+        if(arguments.length!=1){
+            throw new Error("delete() method takes only one argument")
+        }
         if (typeof id != 'string') {
             throw new Error("id should be string only")
         }
@@ -109,6 +121,9 @@ class DB {
     find(obj) {
         if (arguments.length == 0) {
             throw new Error('Please pass the object')
+        }
+        if (arguments.length!=1){
+            throw new Error("find() method only takes one parameter")
         }
         if (typeof obj !== 'object' || Array.isArray(obj) || obj === null || Object.keys(obj) == 0) {
             throw new Error("Pass the proper Object to find()")
@@ -215,7 +230,7 @@ const id3 = db.create(person3);
 console.log("id ---> " + id3) // u3
 
 // read() 
-const customer = db.read(id2);
+const customer = db.read(id3);
 console.log('User:')
 console.log(customer) // user object width id
 console.log(db.read('u4')) // null
@@ -230,6 +245,7 @@ db.update(id2, {
     salary: 2222,
     // Wrong: 'Wrong Key' // Error
 });
+// for testing errors
 // db.update(id3,{})
 db.delete(id);
 console.log('Updated u2 And Deleted u1:')
